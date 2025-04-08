@@ -34,6 +34,10 @@ app.get('/lorem', (req, res) => {
 	});
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 // Close the database connection when the server stops
 process.on('SIGINT', () => {
 	db.close((err) => {
