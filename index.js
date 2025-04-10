@@ -1,8 +1,11 @@
 const express = require('express')
+const cors = require('cors')
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('db/sample.db')
 const app = express()
 const port = 3000
+
+app.use(cors());
 
 db.serialize(() => {
   db.run('DROP TABLE IF EXISTS lorem')
