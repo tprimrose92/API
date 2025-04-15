@@ -3,13 +3,16 @@ const cors = require('cors')
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('db/sample.db')
 const app = express()
-const port = 3000
+const port = 8080
 
+app.use(express.json());
 app.use(cors());
 
 db.serialize(() => {
   db.run('DROP TABLE IF EXISTS lorem')
+  db.run('DROP TABLE IF EXISTS users')
   db.run('CREATE TABLE lorem (info TEXT)')
+  db.run('CREATE TABLE users (username TEXT) ')
   const stmt = db.prepare('INSERT INTO lorem VALUES (?)')
 
   for (let i = 0; i < 10; i++) {
@@ -36,6 +39,19 @@ app.get('/lorem', (req, res) => {
 		}
 	});
 });
+
+app.post("/post", (req, res) => {
+	console.log(req.body)
+	const username = req.body.username;
+	db.run('INSERT INTO users (username) VALUES (?)', username, (err) => {
+		if(err)
+			reject(err);
+	});
+	res.send({"message": "Success"});
+});
+
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
